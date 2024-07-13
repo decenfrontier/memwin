@@ -10,7 +10,9 @@ class XMemory:
         self.teb_addr = 0
     
     def read_int(self, addr: int, offset=0):
-        # 读取指定地址的值, 读取4字节, 按int解析
+        '''
+        读取指定地址的值, 读取4字节, 按int解析
+        '''
         self.h_process = self.process.get_h_process()
         # 定义缓冲区和读取的字节数
         buffer = ctypes.c_uint32()  # 读几字节跟这里有关
@@ -28,7 +30,9 @@ class XMemory:
         return buffer.value
     
     def read_short(self, addr: int, offset=0):
-        # 读取指定地址的值, 读取2字节, 按int解析
+        '''
+        读取指定地址的值, 读取2字节, 按int解析
+        '''
         self.h_process = self.process.get_h_process()
         # 定义缓冲区和读取的字节数
         buffer = ctypes.c_uint16()  # 读几字节跟这里有关
@@ -46,6 +50,9 @@ class XMemory:
         return buffer.value
     
     def read_string(self, addr: int, size=256, encoding='ascii'):
+        '''
+        读取指定地址的值, 默认读取256字节, 按ascii解析
+        '''
         self.h_process = self.process.get_h_process()
         # 定义缓冲区和读取的字节数
         buffer = ctypes.create_string_buffer(size)  # 读几字节跟这里有关
@@ -62,9 +69,17 @@ class XMemory:
             raise ctypes.WinError(ctypes.get_last_error())
         return read_until_terminator(buffer.raw).decode(encoding=encoding, errors="ignore")
     
+    def get_addr_from_expr(self, expr: str):
+        '''
+        解析表达式, 得到地址
+        '''
+        
+    
     # ----------------------------- 进程相关 ----------------------------
     def get_module_addr(self, module_name) -> int:
-        # 获取模块基址
+        '''
+        获取模块的首地址
+        '''
         self.h_process = self.process.get_h_process()
         module_addr_array = (ctypes.c_ulong * 1024)()
         needed = ctypes.c_ulong()
@@ -84,13 +99,17 @@ class XMemory:
         raise Exception(f"Module {module_name} not found in process")
     
     def get_module_pe_addr(self, module_name) -> int:
-        # 获取模块的PE结构地址
+        '''
+        获取模块的PE结构地址
+        '''
         module_addr = self.get_module_addr(module_name)
         pe_addr = module_addr + self.read_int(module_addr, 0x3c)
         return pe_addr
     
     def get_module_func_addr(self, module_name, func_name) -> int:
-        # 获取模块内的函数地址
+        '''
+        获取模块内的函数地址
+        '''
         # 先从PE结构中获取可选PE头的大小
         module_addr = self.get_module_addr(module_name)
         print(f"module_addr: {hex(module_addr)}")
@@ -127,7 +146,9 @@ class XMemory:
     
     # ----------------------------- 线程相关 -----------------------------
     def get_teb_addr(self) -> int:
-        # 获取线程的TEB地址
+        '''
+        获取线程的TEB地址
+        '''
         if self.teb_addr:
             return self.teb_addr
         tbi = THREAD_BASIC_INFORMATION()
@@ -146,7 +167,9 @@ class XMemory:
         return self.teb_addr
     
     def get_thread_stack_top_addr(self):
-        # 获取线程的栈顶的地址
+        '''
+        获取线程的栈顶的地址
+        '''
         self.teb_addr = self.get_teb_addr()
         return self.read_int(self.teb_addr, 0x4)
     
