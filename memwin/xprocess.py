@@ -13,8 +13,7 @@ class XProcess:
             return self.pid
         process_id = wintypes.DWORD()
         user32.GetWindowThreadProcessId(self.hwnd, ctypes.byref(process_id))
-        self.pid = process_id
-        print("pid:", self.pid)
+        self.pid = process_id.value
         return self.pid
         
     def get_h_process(self) -> int:
@@ -23,7 +22,6 @@ class XProcess:
             return self.h_process
         self.pid = self.get_pid()
         self.h_process = kernel32.OpenProcess(PROCESS_ALL_ACCESS, False, self.pid)
-        print("h_process:", self.h_process)
         return self.h_process
 
 

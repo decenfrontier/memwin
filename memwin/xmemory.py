@@ -60,7 +60,7 @@ class XMemory:
         return_length = wintypes.ULONG(0)
         ThreadBasicInformation = 0
         status = ntdll.NtQueryInformationThread(
-            self.get_h_thread(),
+            self.thread.get_h_thread(),
             ThreadBasicInformation,
             ctypes.byref(tbi),
             ctypes.sizeof(tbi),
