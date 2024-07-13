@@ -1,5 +1,5 @@
-from structs import *
-
+from .structs import *
+import win32process
 
 class XThread:
     def __init__(self, hwnd: int):

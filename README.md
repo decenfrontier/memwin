@@ -22,3 +22,9 @@ pip install memwin
 ```python
 
 ```
+
+# 单元测试
+```sh
+pip install pytest
+pytest -s
+```

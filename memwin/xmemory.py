@@ -1,6 +1,6 @@
-from structs import *
-from xprocess import XProcess
-from xthread import XThread
+from .structs import *
+from .xprocess import XProcess
+from .xthread import XThread
 
 class XMemory:
     def __init__(self, hwnd: int):
