@@ -1,5 +1,6 @@
 import ctypes
 import ctypes.wintypes as wintypes
+from typing import *
 
 
 user32 = ctypes.WinDLL('user32', use_last_error=True)

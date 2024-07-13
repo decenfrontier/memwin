@@ -39,7 +39,7 @@ hwnd=329884
 xm = XMemory(hwnd)
 teb_addr = xm.get_teb_addr()
 print(f"TEB地址: {teb_addr}")
-stack_top_addr = xm.read_int(teb_addr+4, 4)
+stack_top_addr = xm.read_int(teb_addr, 0x4)
 print(f"栈顶指针: {stack_top_addr}")
 ```
 
