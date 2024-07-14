@@ -22,3 +22,9 @@ def test_get_module_func_addr():
     base_thread_init_thunk_address = xm.get_module_func_addr("kernel32.dll", "BaseThreadInitThunk")
     print(f"base_thread_init_thunk_address: {hex(base_thread_init_thunk_address)}")
     assert base_thread_init_thunk_address == 0x75fa7b90
+    
+def test_get_addr_from_expr():
+    xm = XMemory(hwnd=329884)
+    value = xm.get_value_from_addr_expr("0xDFF7C-0xA30+0x1F8+0x88+0xC+0x78+0x52C")
+    print(f"value: {value}")
+    assert value == 5472

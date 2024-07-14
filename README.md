@@ -32,7 +32,7 @@
 但在使用过程中要注意, 一定要调用方法来获取对象的属性, 不要直接读属性
 
 
-欢迎各位大佬 有技术的提个PR, 没技术的点个Star, 共同完善这个库~
+欢迎各位大佬, 动动手点个Star, 共同完善这个库~
 
 
 # 安装
@@ -74,20 +74,3 @@ stack_top_addr = xm.read_int(teb_addr, 0x4)
 print(f"栈顶指针: {stack_top_addr}")
 ```
 
-# 单元测试
-```sh
-pip install pytest
-pytest -s
-```
-
-# 上传分发包
-第一次运行要装:
-```sh
-python3 -m pip install --user --upgrade setuptools wheel
-pip install twine
-```
-以后运行这两个命令就可以打包和上传到PYPI了
-```sh
-python setup.py sdist build
-twine upload dist/*
-```

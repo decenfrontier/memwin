@@ -69,12 +69,33 @@ class XMemory:
             raise ctypes.WinError(ctypes.get_last_error())
         return read_until_terminator(buffer.raw).decode(encoding=encoding, errors="ignore")
     
-    def get_addr_from_expr(self, expr: str):
+    def get_value_from_addr_expr(self, expr: str):
         '''
-        解析表达式, 得到地址
+        解析地址表达式, 得到该地址对应的值
+        表达式形如: 0xDFF7C-0xA30+0x1F8+0x88+0xC+0x78+0x52C
         '''
-        
-    
+        arr = expr.split('+')
+        addr = 0
+        # i = 0
+        for offset in arr:
+            # print(f"----------{i} start----------")
+            if '-' in offset:
+                base, delta = offset.split('-')
+                base = int(base, 16)
+                delta = int(delta, 16)
+                # print(f"base:{hex(base)}, delta:{hex(delta)}")
+                offset = hex(base - delta)
+            # print(f"offset: {offset}")
+            this_addr = addr + int(offset, 16)
+            # print(f"this_addr: {hex(this_addr)}")
+            addr = self.read_int(this_addr)
+            # print(f"addr: {hex(addr)}")
+            # print(f"----------{i} end----------")
+            # print()
+            # i += 1
+        value = addr
+        return value
+                
     # ----------------------------- 进程相关 ----------------------------
     def get_module_addr(self, module_name) -> int:
         '''
