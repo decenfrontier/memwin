@@ -5,8 +5,8 @@ with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(name='memwin',  # 包名
-      version='1.2.0',  # 版本号
-      description='一个python操作windows的 进程,线程,内存读写,HOOK的库',
+      version='1.3.0',  # 版本号
+      description='一个python操作windows的 进程,线程,内存读写,DLL注入的库',
       long_description=long_description,
       long_description_content_type="text/markdown",
       author='decenfrontier',

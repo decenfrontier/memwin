@@ -2,6 +2,7 @@ from memwin.utils import read_until_terminator
 from .structs import *
 from .xprocess import XProcess
 from .xthread import XThread
+from .xapi import XWinAPI
 
 class XMemory:
     def __init__(self, hwnd: int):
@@ -133,18 +134,18 @@ class XMemory:
         '''
         # 先从PE结构中获取可选PE头的大小
         module_addr = self.get_module_addr(module_name)
-        print(f"module_addr: {hex(module_addr)}")
+        # print(f"module_addr: {hex(module_addr)}")
         pe_addr = self.get_module_pe_addr(module_name)
-        print(f"pe_addr: {hex(pe_addr)}")
+        # print(f"pe_addr: {hex(pe_addr)}")
         option_pe_header_size = self.read_short(pe_addr, 4+16)
-        print(f"option_pe_header_size: {hex(option_pe_header_size)}")
+        # print(f"option_pe_header_size: {hex(option_pe_header_size)}")
         # 定位到数据目录表的地址(从可选头最后128的字节开始)
         data_directory_addr = pe_addr + 4 + 20 + option_pe_header_size - 128
-        print(f"data_directory_addr: {hex(data_directory_addr)}")
+        # print(f"data_directory_addr: {hex(data_directory_addr)}")
         # 数据目录表的第1项是导出表的地址
         export_table_rva = self.read_int(data_directory_addr)
         export_table_addr = module_addr + export_table_rva
-        print(f"export_table_addr: {hex(export_table_addr)}")
+        # print(f"export_table_addr: {hex(export_table_addr)}")
         # 获取 函数地址表地址, 函数名称表地址, 函数序列表地址
         func_addr_table_rva = self.read_int(export_table_addr, 28)
         func_name_table_rva = self.read_int(export_table_addr, 32)
@@ -164,6 +165,39 @@ class XMemory:
             func_addr = module_addr + func_addr_rva
             return func_addr
         return 0
+    
+    def inject_dll(self, dll_path: str):
+        # 获取进程句柄
+        self.h_process = self.process.get_h_process()
+        # 在目标进程中分配内存, 存放dll路径
+        path_bytes = str(dll_path).encode()
+        path_size = len(path_bytes) + 1
+        alloc_addr = XWinAPI.VirtualAllocEx(self.h_process, 0, path_size, MEM_COMMIT, PAGE_READWRITE)
+        if not alloc_addr:
+            print("VirtualAllocEx failed")
+            return False
+        print(f"alloc_addr: {hex(alloc_addr)}")
+        # 写入dll路径到目标进程内存
+        res = XWinAPI.WriteProcessMemory(self.h_process, alloc_addr, path_bytes, path_size, None)
+        print(f"WriteProcessMemory: {res}")
+        # 创建远程线程, 调用 LoadLibraryA
+        load_lib_addr = self.get_module_func_addr("kernel32.dll", "LoadLibraryA")
+        print(f"load_lib_addr: {hex(load_lib_addr)}")
+        lpThreadAttributes = LPSECURITY_ATTRIBUTES()
+        lpThreadAttributes.nLength = ctypes.sizeof(LPSECURITY_ATTRIBUTES)
+        lpThreadAttributes.lpSecurityDescriptor = None
+        lpThreadAttributes.bInheritHandle = True
+        h_thread = XWinAPI.CreateRemoteThread(self.h_process, ctypes.byref(lpThreadAttributes), 0, load_lib_addr, alloc_addr, 0, None)
+        if not h_thread:
+            print("CreateRemoteThread failed")
+            return False
+        # 等待线程结束
+        XWinAPI.WaitForSingleObject(h_thread, -1)
+        # 释放内存
+        XWinAPI.CloseHandle(h_thread)
+        # WinAPI.VirtualFreeEx(self.h_process, alloc_addr, 0, MEM_RELEASE)
+        print("inject dll success")
+        return True
     
     # ----------------------------- 线程相关 -----------------------------
     def get_teb_addr(self) -> int:
