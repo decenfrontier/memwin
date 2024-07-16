@@ -54,11 +54,44 @@ class MODULEENTRY32(ctypes.Structure):
         ("szExePath", ctypes.c_char * 260),
     ]
     
-class LPSECURITY_ATTRIBUTES(ctypes.Structure):
+class SECURITY_ATTRIBUTES(ctypes.Structure):
     _fields_ = [
         ("nLength", ctypes.c_ulong),
         ("lpSecurityDescriptor", ctypes.c_void_p),
         ("bInheritHandle", ctypes.wintypes.BOOL)
     ]
+LPSECURITY_ATTRIBUTES = ctypes.POINTER(SECURITY_ATTRIBUTES)
 
+class STARTUPINFOA(ctypes.Structure):
+    _fields_ = [
+        ("cb", wintypes.DWORD),
+        ("lpReserved", ctypes.c_char_p),
+        ("lpDesktop", ctypes.c_char_p),
+        ("lpTitle", ctypes.c_char_p),
+        ("dwX", wintypes.DWORD),
+        ("dwY", wintypes.DWORD),
+        ("dwXSize", wintypes.DWORD),
+        ("dwYSize", wintypes.DWORD),
+        ("dwXCountChars", wintypes.DWORD),
+        ("dwYCountChars", wintypes.DWORD),
+        ("dwFillAttribute", wintypes.DWORD),
+        ("dwFlags", wintypes.DWORD),
+        ("wShowWindow", wintypes.WORD),
+        ("cbReserved2", wintypes.WORD),
+        ("lpReserved2", ctypes.c_byte * 24),
+        ("hStdInput", wintypes.HANDLE),
+        ("hStdOutput", wintypes.HANDLE),
+        ("hStdError", wintypes.HANDLE),
+    ]
 
+LPSTARTUPINFOA = ctypes.POINTER(STARTUPINFOA)
+
+class PROCESS_INFORMATION(ctypes.Structure):
+    _fields_ = [
+        ("hProcess", wintypes.HANDLE),
+        ("hThread", wintypes.HANDLE),
+        ("dwProcessId", wintypes.DWORD),
+        ("dwThreadId", wintypes.DWORD),
+    ]
+
+LPPROCESS_INFORMATION = ctypes.POINTER(PROCESS_INFORMATION)

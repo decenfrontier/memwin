@@ -183,11 +183,12 @@ class XMemory:
         # 创建远程线程, 调用 LoadLibraryA
         load_lib_addr = self.get_module_func_addr("kernel32.dll", "LoadLibraryA")
         print(f"load_lib_addr: {hex(load_lib_addr)}")
-        lpThreadAttributes = LPSECURITY_ATTRIBUTES()
-        lpThreadAttributes.nLength = ctypes.sizeof(LPSECURITY_ATTRIBUTES)
-        lpThreadAttributes.lpSecurityDescriptor = None
-        lpThreadAttributes.bInheritHandle = True
-        h_thread = XWinAPI.CreateRemoteThread(self.h_process, ctypes.byref(lpThreadAttributes), 0, load_lib_addr, alloc_addr, 0, None)
+        sa = SECURITY_ATTRIBUTES()
+        sa.nLength = ctypes.sizeof(SECURITY_ATTRIBUTES)
+        sa.lpSecurityDescriptor = None
+        sa.bInheritHandle = True
+        lpThreadAttributes = ctypes.POINTER(sa)
+        h_thread = XWinAPI.CreateRemoteThread(self.h_process, lpThreadAttributes, 0, load_lib_addr, alloc_addr, 0, None)
         if not h_thread:
             print("CreateRemoteThread failed")
             return False

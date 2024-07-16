@@ -72,7 +72,7 @@ class XWinAPI:
     @api_annotater(kernel32.CreateRemoteThread)
     def CreateRemoteThread(
         handle: wintypes.HANDLE,
-        thread_attributes: ctypes.POINTER(LPSECURITY_ATTRIBUTES),
+        thread_attributes: ctypes.POINTER(SECURITY_ATTRIBUTES),
         stack_size: ctypes.c_size_t,
         start_address: wintypes.LPVOID,
         start_parameter: wintypes.LPVOID,
@@ -104,3 +104,18 @@ class XWinAPI:
     ) -> wintypes.BOOL:
         pass
 
+    @staticmethod
+    @api_annotater(kernel32.CreateProcessA)
+    def CreateProcess(
+        lpApplicationName: wintypes.LPCSTR,
+        lpCommandLine: wintypes.LPSTR,
+        lpProcessAttributes: ctypes.POINTER(SECURITY_ATTRIBUTES),
+        lpThreadAttributes: ctypes.POINTER(SECURITY_ATTRIBUTES),
+        bInheritHandles: wintypes.BOOL,
+        dwCreationFlags: wintypes.DWORD,
+        lpEnvironment: wintypes.LPVOID,
+        lpCurrentDirectory: wintypes.LPCSTR,
+        lpStartupInfo: LPSTARTUPINFOA,
+        lpProcessInformation: LPPROCESS_INFORMATION,
+    ) -> wintypes.BOOL:
+        pass

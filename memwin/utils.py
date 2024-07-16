@@ -21,6 +21,7 @@ def api_annotater(func_ptr: Any) -> Callable[
 
         @functools.wraps(function)
         def handle_call(*args) -> T:
+            print(f"Calling {function.__name__} with args {args}")
             return func_ptr(*args)
         return handle_call
     return wrap
