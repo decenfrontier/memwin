@@ -72,7 +72,7 @@ class XWinAPI:
     @api_annotater(kernel32.CreateRemoteThread)
     def CreateRemoteThread(
         handle: wintypes.HANDLE,
-        thread_attributes: ctypes.POINTER(SECURITY_ATTRIBUTES),
+        thread_attributes: LPSECURITY_ATTRIBUTES,
         stack_size: ctypes.c_size_t,
         start_address: wintypes.LPVOID,
         start_parameter: wintypes.LPVOID,
@@ -109,8 +109,8 @@ class XWinAPI:
     def CreateProcess(
         lpApplicationName: wintypes.LPCSTR,
         lpCommandLine: wintypes.LPSTR,
-        lpProcessAttributes: ctypes.POINTER(SECURITY_ATTRIBUTES),
-        lpThreadAttributes: ctypes.POINTER(SECURITY_ATTRIBUTES),
+        lpProcessAttributes: LPSECURITY_ATTRIBUTES,
+        lpThreadAttributes: LPSECURITY_ATTRIBUTES,
         bInheritHandles: wintypes.BOOL,
         dwCreationFlags: wintypes.DWORD,
         lpEnvironment: wintypes.LPVOID,
@@ -118,4 +118,20 @@ class XWinAPI:
         lpStartupInfo: LPSTARTUPINFOA,
         lpProcessInformation: LPPROCESS_INFORMATION,
     ) -> wintypes.BOOL:
+        pass
+    
+    @staticmethod
+    @api_annotater(user32.EnumWindows)
+    def EnumWindows(
+        enum_func: ENUM_WND_PROC,
+        param: wintypes.LPARAM,
+    ) -> wintypes.BOOL:
+        pass
+    
+    @staticmethod
+    @api_annotater(user32.GetWindowThreadProcessId)
+    def GetWindowThreadProcessId(
+        hwnd: wintypes.HWND, 
+        process_id: wintypes.LPDWORD
+    ) -> wintypes.DWORD:
         pass

@@ -30,9 +30,9 @@ class XProcess:
         return self.h_process
 
     @staticmethod
-    def create_process(cmd_line: str, cwd: str, app_path="") -> bool:
+    def create_process(cmd_line: str, cwd="", app_path="") -> int:
         """
-        创建进程
+        创建进程, 返回新进程的PID
         """
         startupinfo = STARTUPINFOA()
         startupinfo.cb = ctypes.sizeof(startupinfo)
@@ -41,4 +41,28 @@ class XProcess:
         cmd_line = cmd_line.encode('ansi')
         app_path = app_path.encode('ansi') if app_path else None
         res = XWinAPI.CreateProcess(app_path, cmd_line, None, None, False, 0, None, cwd, ctypes.byref(startupinfo), ctypes.byref(process_info))
-        return res == 1
+        if not res:
+            return 0
+        return int(process_info.dwProcessId)
+    
+    @staticmethod
+    def get_hwnd_by_pid(pid: int) -> int:
+        def enum_windows_proc(hwnd, lParam):
+            arg = ctypes.cast(lParam, ctypes.POINTER(EnumWindowsArg)).contents
+            dwProcessID = ctypes.c_ulong()
+            XWinAPI.GetWindowThreadProcessId(hwnd, ctypes.byref(dwProcessID))
+            if dwProcessID.value == arg.dwProcessID:
+                arg.hwnd = hwnd
+                # 找到了返回False, 停止枚举
+                return False
+            # 没找到，继续找，返回True
+            return True
+        ewa = EnumWindowsArg()
+        ewa.dwProcessID = ctypes.c_ulong(pid)
+        ewa.hwnd = None
+        XWinAPI.EnumWindows(ENUM_WND_PROC(enum_windows_proc), ctypes.addressof(ewa))
+        if ewa.hwnd is None:
+            return 0
+        return ewa.hwnd
+
+        

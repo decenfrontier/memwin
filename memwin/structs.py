@@ -95,3 +95,32 @@ class PROCESS_INFORMATION(ctypes.Structure):
     ]
 
 LPPROCESS_INFORMATION = ctypes.POINTER(PROCESS_INFORMATION)
+
+class PROCESSENTRY32(ctypes.Structure):
+    _fields_ = [
+        ("dwSize", ctypes.wintypes.DWORD),
+        ("cntUsage", ctypes.wintypes.DWORD),
+        ("th32ProcessID", ctypes.wintypes.DWORD),
+        ("th32DefaultHeapID", ctypes.POINTER(ctypes.wintypes.ULONG)),
+        ("th32ModuleID", ctypes.wintypes.DWORD),
+        ("cntThreads", ctypes.wintypes.DWORD),
+        ("th32ParentProcessID", ctypes.wintypes.DWORD),
+        ("pcPriClassBase", ctypes.wintypes.LONG),
+        ("dwFlags", ctypes.wintypes.DWORD),
+        ("szExeFile", ctypes.c_char * ctypes.wintypes.MAX_PATH)
+    ]
+    
+
+# 定义枚举窗口参数结构体
+class EnumWindowsArg(ctypes.Structure):
+    _fields_ = [
+        ("hwnd", ctypes.c_void_p),
+        ("dwProcessID", ctypes.c_ulong)
+    ]
+    
+    
+ENUM_WND_PROC = ctypes.WINFUNCTYPE(
+    ctypes.c_int,  # 返回值类型
+    ctypes.c_void_p,  # HWND
+    ctypes.c_size_t   # LPARAM
+)

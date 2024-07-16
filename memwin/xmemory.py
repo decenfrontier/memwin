@@ -176,18 +176,15 @@ class XMemory:
         if not alloc_addr:
             print("VirtualAllocEx failed")
             return False
-        print(f"alloc_addr: {hex(alloc_addr)}")
         # 写入dll路径到目标进程内存
-        res = XWinAPI.WriteProcessMemory(self.h_process, alloc_addr, path_bytes, path_size, None)
-        print(f"WriteProcessMemory: {res}")
+        XWinAPI.WriteProcessMemory(self.h_process, alloc_addr, path_bytes, path_size, None)
         # 创建远程线程, 调用 LoadLibraryA
         load_lib_addr = self.get_module_func_addr("kernel32.dll", "LoadLibraryA")
-        print(f"load_lib_addr: {hex(load_lib_addr)}")
         sa = SECURITY_ATTRIBUTES()
-        sa.nLength = ctypes.sizeof(SECURITY_ATTRIBUTES)
+        sa.nLength = ctypes.sizeof(sa)
         sa.lpSecurityDescriptor = None
         sa.bInheritHandle = True
-        lpThreadAttributes = ctypes.POINTER(sa)
+        lpThreadAttributes = LPSECURITY_ATTRIBUTES(sa)
         h_thread = XWinAPI.CreateRemoteThread(self.h_process, lpThreadAttributes, 0, load_lib_addr, alloc_addr, 0, None)
         if not h_thread:
             print("CreateRemoteThread failed")
@@ -196,8 +193,7 @@ class XMemory:
         XWinAPI.WaitForSingleObject(h_thread, -1)
         # 释放内存
         XWinAPI.CloseHandle(h_thread)
-        # WinAPI.VirtualFreeEx(self.h_process, alloc_addr, 0, MEM_RELEASE)
-        print("inject dll success")
+        XWinAPI.VirtualFreeEx(self.h_process, alloc_addr, 0, MEM_RELEASE)
         return True
     
     # ----------------------------- 线程相关 -----------------------------
