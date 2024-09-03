@@ -7,6 +7,10 @@ class XProcess:
         self.hwnd = hwnd
         self.pid = 0
         self.h_process = 0
+
+    def __del__(self):
+        if self.h_process:
+            XWinAPI.CloseHandle(self.h_process)
         
     def get_pid(self) -> int:
         '''

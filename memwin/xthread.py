@@ -8,6 +8,10 @@ class XThread:
         self.h_thread = 0
         self.pid = 0
         self.teb_addr = 0
+
+    def __del__(self):
+        if self.h_thread:
+            kernel32.CloseHandle(self.h_thread)
         
     def get_tid(self) -> int:
         '''

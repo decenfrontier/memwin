@@ -6,10 +6,9 @@ from memwin.xprocess import XProcess
 
 
 def test_create_process():
-    #  -Xss2m -Xms128m -Xmx256m -Dfile.encoding=GB2312 -verbose:gc -cp . 
-    app_path = r"D:\倚天剑与屠龙刀\bin\seasky.exe"
-    lpCommandLine = r"  -Xss2m -Xms128m -Xmx256m -Dfile.encoding=GB2312 -verbose:gc -cp . senv.xload.XLoad applib htp seasky.zar:hero.zar hero.fore.Start seaskyWin=true startAt=hero1.zar fps=true dcAddress=82.157.27.48 volumesAddress=http://ytsl.linekong.cn/line/YTVolumes123S20"
-    cwd = r"D:\倚天剑与屠龙刀"
+    lpCommandLine = "notepad.exe"
+    cwd = ""
+    app_path = ""
     pid = XProcess.create_process(lpCommandLine, cwd, app_path)
     print(f"pid: {pid}")
     assert pid != 0
