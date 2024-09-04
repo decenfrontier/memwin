@@ -1,7 +1,7 @@
 .PHONY: help build test
 
 VERSION_FILE=memwin/version.py
-VERSION='1.9.5'
+VERSION='1.9.6'
 
 write_version:
 	@echo "version = $(VERSION)" > $(VERSION_FILE)
@@ -17,7 +17,7 @@ build: write_version
 test:
 	# pytest -s tests/test_xprocess.py -k "test_create_process"
 	# pytest -s tests/test_xthread.py -k "test_get_pid"
-	pytest -s tests/test_xapi.py -k "test_load_image"
+	pytest -s tests/test_xapi.py -k "test_window_from_point"
 
 
 help:

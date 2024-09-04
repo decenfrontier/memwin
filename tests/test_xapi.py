@@ -62,8 +62,10 @@ def test_load_image():
 
 
 def test_set_system_cursor():
+    import time
+    time.sleep(5)
     hCursorOld = XWinAPI.GetCursor()
-    
+    print(f'hCursorOld:{hCursorOld}')
     path = os.path.join(os.getcwd(), 'tests', 'search.cur')
     hCursor = XWinAPI.LoadImage(
         None,
@@ -76,7 +78,10 @@ def test_set_system_cursor():
     res = XWinAPI.SetSystemCursor(hCursor, XWinCon.OCR_NORMAL)  # 0表示全局光标
     assert res == 1
     # 然后尝试恢复默认光标
-    import time
-    time.sleep(5)
+    time.sleep(2)
     res = XWinAPI.SetSystemCursor(hCursorOld, XWinCon.OCR_NORMAL)
     assert res == 1
+
+def test_window_from_point():
+    hwnd = XWinAPI.WindowFromPoint(wintypes.POINT(150, 160))
+    assert hwnd == 920638

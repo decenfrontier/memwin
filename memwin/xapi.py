@@ -215,3 +215,13 @@ class XWinAPI:
         - hCur: 要设置的鼠标指针的句柄, 
         - cursorId: 替换指针的哪种形态, 一般都用普通选择OCR_NORMAL=32512
         """
+
+    @staticmethod
+    @api_annotater(user32.WindowFromPoint)
+    def WindowFromPoint(
+        pt: wintypes.POINT
+    ) -> wintypes.HWND:
+        """
+        本API用于获取鼠标指向的窗口句柄
+        - pt: 鼠标坐标
+        """
