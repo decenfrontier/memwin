@@ -1,5 +1,5 @@
 from .structs import *
-import win32process
+from .xapi import XWinAPI
 
 
 class XThread:
@@ -20,7 +20,10 @@ class XThread:
         """
         if self.tid:
             return self.tid
-        self.tid, self.pid = win32process.GetWindowThreadProcessId(self.hwnd)
+        pid = wintypes.DWORD()
+        self.tid = XWinAPI.GetWindowThreadProcessId(
+            self.hwnd, ctypes.byref(pid))
+        self.pid = pid.value
         return self.tid
 
     def get_pid(self) -> int:
@@ -29,7 +32,10 @@ class XThread:
         """
         if self.pid:
             return self.pid
-        self.tid, self.pid = win32process.GetWindowThreadProcessId(self.hwnd)
+        pid = wintypes.DWORD()
+        self.tid = XWinAPI.GetWindowThreadProcessId(
+            self.hwnd, ctypes.byref(pid))
+        self.pid = pid.value
         return self.pid
 
     def get_h_thread(self) -> int:

@@ -133,9 +133,14 @@ class XWinAPI:
     @api_annotater(user32.GetWindowThreadProcessId)
     def GetWindowThreadProcessId(
         hwnd: wintypes.HWND,
-        process_id: wintypes.LPDWORD
+        pid: wintypes.LPDWORD
     ) -> wintypes.DWORD:
-        pass
+        """
+        本API用于根据窗口句柄获取进程ID和线程ID
+        - wintypes.HWND hwnd: [in]窗口句柄
+        - wintypes.LPDWORD process_id: [out]返回的进程ID
+        - 返回值: 0表示失败, 非0表示成功, 值为线程ID
+        """
 
     @staticmethod
     @api_annotater(kernel32.GetModuleFileNameW)

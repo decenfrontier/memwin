@@ -1,6 +1,6 @@
 from distutils.core import setup
 from setuptools import find_packages
-from version import version
+from memwin.version import version
 
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()

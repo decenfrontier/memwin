@@ -1,20 +1,23 @@
 .PHONY: help build test
 
-VERSION_FILE=version.py
-VERSION='1.7.0'
+VERSION_FILE=memwin/version.py
+VERSION='1.9.2'
 
 write_version:
 	@echo "version = $(VERSION)" > $(VERSION_FILE)
 
 
 build: write_version
+	@echo "Building memwin-$(VERSION)"
 	@python setup.py sdist build
-	@twine upload dist/*
+	@echo "Uploading to PyPI"
+	@twine upload dist/memwin-$(VERSION).tar.gz
 
 
 test:
 	# pytest -s tests/test_xprocess.py -k "test_create_process"
-	pytest -s tests/test_xapi.py -k "test_set_system_cursor"
+	pytest -s tests/test_xthread.py -k "test_get_pid"
+	# pytest -s tests/test_xapi.py -k "test_set_system_cursor"
 
 
 help:
