@@ -1,5 +1,6 @@
 import functools
 import itertools
+import ctypes
 from typing import *
 
 T = TypeVar("T")
@@ -24,3 +25,7 @@ def api_annotater(func_ptr: Any) -> Callable[
             return func_ptr(*args)
         return handle_call
     return wrap
+
+
+def MAKEINTRESOURCE(id: int):
+    return ctypes.cast(id, ctypes.wintypes.LPCWSTR)

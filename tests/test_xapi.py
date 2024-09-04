@@ -1,7 +1,9 @@
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..')))
 
+from memwin.utils import MAKEINTRESOURCE
 from memwin.constants import XWinCon
 from memwin.xapi import XWinAPI
 from ctypes import wintypes
@@ -46,6 +48,16 @@ def test_load_image():
     print(f"hCursor:{hCursor}")
     if hCursor is None:
         print('last error:', kernel32.GetLastError())
+    assert hCursor is not None
+    # 加载系统游标
+    hCursor = XWinAPI.LoadImage(
+        None,
+        MAKEINTRESOURCE(32512),
+        wintypes.UINT(XWinCon.IMAGE_CURSOR),
+        0, 0,
+        wintypes.UINT(XWinCon.LR_SHARED),
+    )
+    print(f"hCursor system:{hCursor}")
     assert hCursor is not None
 
 

@@ -167,12 +167,21 @@ class XWinAPI:
         """
 
     @staticmethod
-    @api_annotater(user32.CopyCursor)
-    def CopyCursor(
-        hCursor: wintypes.HANDLE
+    @api_annotater(user32.CopyImage)
+    def CopyImage(
+        hImage: wintypes.HANDLE,
+        type: wintypes.UINT,
+        cx: ctypes.c_int,
+        cy: ctypes.c_int,
+        flags: wintypes.UINT,
     ) -> wintypes.HANDLE:
         """
         本API拷贝一份Cursor句柄, 返回一个新句柄
+        - wintypes.HANDLE hImage: [in]要拷贝的句柄
+        - wintypes.UINT type: [in]要拷贝的资源类型, IMAGE_CURSOR=2
+        - wintypes.c_int cx: [in]新图片的宽度, 0表示与原始 hImage 相同
+        - wintypes.c_int cy: [in]新图片的高度, 0表示与原始 hImage 相同
+        - wintypes.UINT flags: [in]拷贝标志, LR_DEFAULTCOLOR=0
         """
 
     @staticmethod
