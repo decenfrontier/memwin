@@ -4,7 +4,8 @@ build:
 	./build_upload.sh
 
 test:
-	pytest -s tests/test_xprocess.py -k "test_create_process"
+	# pytest -s tests/test_xprocess.py -k "test_create_process"
+	pytest -s tests/test_xapi.py -k "test_load_image"
 
 # show help
 help:

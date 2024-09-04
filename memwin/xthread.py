@@ -1,6 +1,7 @@
 from .structs import *
 import win32process
 
+
 class XThread:
     def __init__(self, hwnd: int):
         self.hwnd = hwnd
@@ -12,32 +13,31 @@ class XThread:
     def __del__(self):
         if self.h_thread:
             kernel32.CloseHandle(self.h_thread)
-        
+
     def get_tid(self) -> int:
-        '''
+        """
         获取线程ID
-        '''
+        """
         if self.tid:
             return self.tid
         self.tid, self.pid = win32process.GetWindowThreadProcessId(self.hwnd)
         return self.tid
-    
+
     def get_pid(self) -> int:
-        '''
+        """
         获取进程ID
-        '''
+        """
         if self.pid:
             return self.pid
         self.tid, self.pid = win32process.GetWindowThreadProcessId(self.hwnd)
         return self.pid
 
     def get_h_thread(self) -> int:
-        '''
+        """
         获取线程句柄
-        '''
+        """
         if self.h_thread:
             return self.h_thread
-        self.h_thread = kernel32.OpenThread(THREAD_ALL_ACCESS, False, self.get_tid())
+        self.h_thread = kernel32.OpenThread(
+            THREAD_ALL_ACCESS, False, self.get_tid())
         return self.h_thread
-    
-    

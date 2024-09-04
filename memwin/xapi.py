@@ -135,3 +135,78 @@ class XWinAPI:
         process_id: wintypes.LPDWORD
     ) -> wintypes.DWORD:
         pass
+
+    @staticmethod
+    @api_annotater(kernel32.GetModuleFileNameW)
+    def GetModuleFileName(
+        hModule: wintypes.HMODULE,
+        lpFileName: wintypes.LPWSTR,
+        nSize: wintypes.DWORD,
+    ) -> wintypes.DWORD:
+        """
+        本API用于获取模块的完整路径
+        - wintypes.HMODULE hModule: [in]模块句柄, NULL则为本进程
+        - wintypes.LPSTR lpFileName: [out]返回的模块的完整路径
+        - wintypes.DWORD nSize: [in]lpFilename 缓冲区的大小
+        函数成功返回复制到缓冲区的字符长度, 失败返回0
+        """
+        pass
+
+    @staticmethod
+    @api_annotater(user32.LoadCursorW)
+    def LoadCursor(
+        hInst: wintypes.HINSTANCE,
+        lpCursorName: wintypes.LPCWSTR
+    ) -> wintypes.HANDLE:
+        """
+        本API用于加载系统内置的鼠标指针, 实际上发现并没有用(单测失败)
+        - wintypes.HINSTANCE hInst: DLL或exe文件的模块句柄。若要加载预定义的系统游标，设置为NULL
+        - wintypes.LPCWSTR lpCursorName: 
+            - 若hInstance 为非 NULL， 则 lpCursorName 按名称或序号指定游标资源。 必须使用 MAKEINTRESOURCE 宏打包此序号
+            - 若hInstance 为 NULL， 则 lpCursorName 将指定以要加载的预定义系统游标 IDC_前缀 开头的标识符
+        """
+        pass
+
+    @staticmethod
+    @api_annotater(user32.LoadImageW)
+    def LoadImage(
+        hInst: wintypes.HINSTANCE,
+        name: wintypes.LPCWSTR,
+        type: wintypes.UINT,
+        cx: ctypes.c_int,
+        cy: ctypes.c_int,
+        fuLoad: wintypes.UINT
+    ) -> wintypes.HANDLE:
+        """
+        本API用于加载图片, 返回一个句柄, 可以被用来设置为鼠标指针(单测失败)
+        - HINSTANCE hInst: 实例句柄，NULL 表示从当前进程加载
+        - LPCSTR    name: 图片文件的路径
+        - UINT      type: 图像的类型 IMAGE_CURSOR=2, 加载为游标
+        - int       cx: 指定宽度，0表示默认大小
+        - int       cy: 指定高度，0表示默认大小
+        - UINT      fuLoad: 加载标志 LR_LOADFROMFILE
+        """
+
+    @staticmethod
+    @api_annotater(user32.SetSystemCursor)
+    def SetSystemCursor(
+        hCur: wintypes.HANDLE,
+        cursorId: wintypes.DWORD
+    ) -> wintypes.BOOL:
+        """
+        本API用于设置系统鼠标指针(单测失败)
+        """
+        pass
+    
+    @staticmethod
+    @api_annotater(user32.SystemParametersInfoW)
+    def SystemParametersInfo(
+        uiAction: wintypes.UINT,
+        uiParam: wintypes.UINT,
+        pvParam: wintypes.LPVOID,
+        fWinIni: wintypes.UINT
+    ) -> wintypes.BOOL:
+        """
+        本API用于恢复系统默认鼠标指针(未单测)
+        """
+        pass

@@ -13,9 +13,9 @@ class XProcess:
             XWinAPI.CloseHandle(self.h_process)
         
     def get_pid(self) -> int:
-        '''
+        """
         获取进程ID
-        '''
+        """
         if self.pid:
             return self.pid
         process_id = wintypes.DWORD()
@@ -24,9 +24,9 @@ class XProcess:
         return self.pid
         
     def get_h_process(self) -> int:
-        '''
+        """
         获取进程句柄
-        '''
+        """
         if self.h_process:
             return self.h_process
         self.pid = self.get_pid()
