@@ -1,11 +1,12 @@
 from distutils.core import setup
 from setuptools import find_packages
+from version import version
 
 with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
 setup(name='memwin',  # 包名
-      version='1.6.0',  # 版本号
+      version=version,  # 版本号
       description='一个python操作windows的 进程,线程,内存读写,DLL注入的库',
       long_description=long_description,
       long_description_content_type="text/markdown",

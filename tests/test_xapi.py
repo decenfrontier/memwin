@@ -1,12 +1,12 @@
-
-from ctypes import wintypes
-import ctypes
-import pytest
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from memwin.xapi import XWinAPI
+from ctypes import wintypes
+import ctypes
+import pytest
+
 
 user32 = ctypes.WinDLL('user32', use_last_error=True)
 kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
@@ -26,23 +26,22 @@ def test_get_module_file_name():
     assert res != 0
 
 
-def test_load_cursor():
-    cursor_id = "Idc_ARROW"  # 表示系统默认箭头光标
-    cursor_handle = XWinAPI.LoadCursor(None, wintypes.LPCWSTR(cursor_id))
-    print(f'cursor_handle: {cursor_handle}')
-    assert cursor_handle is not None
+def test_get_cursor():
+    hCursor = XWinAPI.GetCursor()
+    print(f'cursor_handle: {hCursor}')
+    assert hCursor is not None
 
 
 def test_load_image():
     IMAGE_CURSOR = 2
     LR_LOADFROMFILE = 0x00000010
-    path = os.path.join(os.getcwd(), 'tests', 'search.png')
+    path = os.path.join(os.getcwd(), 'tests', 'search.cur')
     print(f'path:{path}')
     hCursor = XWinAPI.LoadImage(
         None,
         path,
         wintypes.UINT(IMAGE_CURSOR),
-        0,0,
+        0, 0,
         wintypes.UINT(LR_LOADFROMFILE),
     )
     print(f"hCursor:{hCursor}")
@@ -52,8 +51,23 @@ def test_load_image():
 
 
 def test_set_system_cursor():
-    cursor_id = "IDC_ARROW"  # 表示系统默认箭头光标
-    cursor_handle = XWinAPI.LoadCursor(None, wintypes.LPCWSTR(cursor_id))
-    print(f'cursor_handle: {cursor_handle}')
-    res = XWinAPI.SetSystemCursor(cursor_handle, 0)  # 0表示全局光标
+    hCursorOld = XWinAPI.GetCursor()
+    IMAGE_CURSOR = 2
+    LR_LOADFROMFILE = 0x00000010
+    OCR_NORMAL = 32512
+    path = os.path.join(os.getcwd(), 'tests', 'search.cur')
+    hCursor = XWinAPI.LoadImage(
+        None,
+        path,
+        wintypes.UINT(IMAGE_CURSOR),
+        0, 0,
+        wintypes.UINT(LR_LOADFROMFILE),
+    )
+    print(f"hCursor:{hCursor}")
+    res = XWinAPI.SetSystemCursor(hCursor, OCR_NORMAL)  # 0表示全局光标
+    assert res == 1
+    # 然后尝试恢复默认光标
+    import time
+    time.sleep(5)
+    res = XWinAPI.SetSystemCursor(hCursorOld, OCR_NORMAL)
     assert res == 1

@@ -1,13 +1,22 @@
 .PHONY: help build test
 
-build:
-	./build_upload.sh
+VERSION_FILE=version.py
+VERSION='1.7.0'
+
+write_version:
+	@echo "version = $(VERSION)" > $(VERSION_FILE)
+
+
+build: write_version
+	@python setup.py sdist build
+	@twine upload dist/*
+
 
 test:
 	# pytest -s tests/test_xprocess.py -k "test_create_process"
-	pytest -s tests/test_xapi.py -k "test_load_image"
+	pytest -s tests/test_xapi.py -k "test_set_system_cursor"
 
-# show help
+
 help:
 	@echo ""
 	@echo "Usage:"

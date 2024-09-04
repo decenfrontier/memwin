@@ -1,11 +1,12 @@
 from .structs import *
 
+
 class XWinAPI:
     @staticmethod
     @api_annotater(kernel32.CloseHandle)
     def CloseHandle(handle: wintypes.HANDLE) -> wintypes.BOOL:
         pass
-    
+
     @staticmethod
     @api_annotater(kernel32.OpenProcess)
     def OpenProcess(
@@ -119,7 +120,7 @@ class XWinAPI:
         lpProcessInformation: LPPROCESS_INFORMATION,
     ) -> wintypes.BOOL:
         pass
-    
+
     @staticmethod
     @api_annotater(user32.EnumWindows)
     def EnumWindows(
@@ -127,11 +128,11 @@ class XWinAPI:
         param: wintypes.LPARAM,
     ) -> wintypes.BOOL:
         pass
-    
+
     @staticmethod
     @api_annotater(user32.GetWindowThreadProcessId)
     def GetWindowThreadProcessId(
-        hwnd: wintypes.HWND, 
+        hwnd: wintypes.HWND,
         process_id: wintypes.LPDWORD
     ) -> wintypes.DWORD:
         pass
@@ -153,19 +154,12 @@ class XWinAPI:
         pass
 
     @staticmethod
-    @api_annotater(user32.LoadCursorW)
-    def LoadCursor(
-        hInst: wintypes.HINSTANCE,
-        lpCursorName: wintypes.LPCWSTR
+    @api_annotater(user32.GetCursor)
+    def GetCursor(
     ) -> wintypes.HANDLE:
         """
-        本API用于加载系统内置的鼠标指针, 实际上发现并没有用(单测失败)
-        - wintypes.HINSTANCE hInst: DLL或exe文件的模块句柄。若要加载预定义的系统游标，设置为NULL
-        - wintypes.LPCWSTR lpCursorName: 
-            - 若hInstance 为非 NULL， 则 lpCursorName 按名称或序号指定游标资源。 必须使用 MAKEINTRESOURCE 宏打包此序号
-            - 若hInstance 为 NULL， 则 lpCursorName 将指定以要加载的预定义系统游标 IDC_前缀 开头的标识符
+        本API返回当前鼠标光标的句柄
         """
-        pass
 
     @staticmethod
     @api_annotater(user32.LoadImageW)
@@ -178,9 +172,9 @@ class XWinAPI:
         fuLoad: wintypes.UINT
     ) -> wintypes.HANDLE:
         """
-        本API用于加载图片, 返回一个句柄, 可以被用来设置为鼠标指针(单测失败)
+        本API用于加载图片, 返回一个句柄, 可以被用来设置为鼠标指针
         - HINSTANCE hInst: 实例句柄，NULL 表示从当前进程加载
-        - LPCSTR    name: 图片文件的路径
+        - LPCSTR    name: 图片文件的路径, 注意文件类型要是*.cur
         - UINT      type: 图像的类型 IMAGE_CURSOR=2, 加载为游标
         - int       cx: 指定宽度，0表示默认大小
         - int       cy: 指定高度，0表示默认大小
@@ -194,10 +188,11 @@ class XWinAPI:
         cursorId: wintypes.DWORD
     ) -> wintypes.BOOL:
         """
-        本API用于设置系统鼠标指针(单测失败)
+        本API用于设置系统鼠标指针
+        - hCur: 要设置的鼠标指针的句柄, 
+        - cursorId: 替换指针的哪种形态, 一般都用普通选择OCR_NORMAL=32512
         """
-        pass
-    
+
     @staticmethod
     @api_annotater(user32.SystemParametersInfoW)
     def SystemParametersInfo(
@@ -209,4 +204,3 @@ class XWinAPI:
         """
         本API用于恢复系统默认鼠标指针(未单测)
         """
-        pass
