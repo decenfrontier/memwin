@@ -1,3 +1,4 @@
+from memwin.constants import XWinCon
 from .structs import *
 from .xapi import XWinAPI
 
@@ -45,5 +46,5 @@ class XThread:
         if self.h_thread:
             return self.h_thread
         self.h_thread = kernel32.OpenThread(
-            THREAD_ALL_ACCESS, False, self.get_tid())
+            XWinCon.THREAD_ALL_ACCESS, False, self.get_tid())
         return self.h_thread

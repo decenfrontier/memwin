@@ -1,3 +1,4 @@
+from memwin.constants import XWinCon
 from memwin.xapi import XWinAPI
 from .structs import *
 
@@ -30,7 +31,7 @@ class XProcess:
         if self.h_process:
             return self.h_process
         self.pid = self.get_pid()
-        self.h_process = kernel32.OpenProcess(PROCESS_ALL_ACCESS, False, self.pid)
+        self.h_process = kernel32.OpenProcess(XWinCon.PROCESS_ALL_ACCESS, False, self.pid)
         return self.h_process
 
     @staticmethod

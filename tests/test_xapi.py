@@ -2,6 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+from memwin.constants import XWinCon
 from memwin.xapi import XWinAPI
 from ctypes import wintypes
 import ctypes
@@ -33,16 +34,14 @@ def test_get_cursor():
 
 
 def test_load_image():
-    IMAGE_CURSOR = 2
-    LR_LOADFROMFILE = 0x00000010
     path = os.path.join(os.getcwd(), 'tests', 'search.cur')
     print(f'path:{path}')
     hCursor = XWinAPI.LoadImage(
         None,
         path,
-        wintypes.UINT(IMAGE_CURSOR),
+        wintypes.UINT(XWinCon.IMAGE_CURSOR),
         0, 0,
-        wintypes.UINT(LR_LOADFROMFILE),
+        wintypes.UINT(XWinCon.LR_LOADFROMFILE),
     )
     print(f"hCursor:{hCursor}")
     if hCursor is None:
@@ -52,22 +51,20 @@ def test_load_image():
 
 def test_set_system_cursor():
     hCursorOld = XWinAPI.GetCursor()
-    IMAGE_CURSOR = 2
-    LR_LOADFROMFILE = 0x00000010
-    OCR_NORMAL = 32512
+    
     path = os.path.join(os.getcwd(), 'tests', 'search.cur')
     hCursor = XWinAPI.LoadImage(
         None,
         path,
-        wintypes.UINT(IMAGE_CURSOR),
+        wintypes.UINT(XWinCon.IMAGE_CURSOR),
         0, 0,
-        wintypes.UINT(LR_LOADFROMFILE),
+        wintypes.UINT(XWinCon.LR_LOADFROMFILE),
     )
     print(f"hCursor:{hCursor}")
-    res = XWinAPI.SetSystemCursor(hCursor, OCR_NORMAL)  # 0表示全局光标
+    res = XWinAPI.SetSystemCursor(hCursor, XWinCon.OCR_NORMAL)  # 0表示全局光标
     assert res == 1
     # 然后尝试恢复默认光标
     import time
     time.sleep(5)
-    res = XWinAPI.SetSystemCursor(hCursorOld, OCR_NORMAL)
+    res = XWinAPI.SetSystemCursor(hCursorOld, XWinCon.OCR_NORMAL)
     assert res == 1

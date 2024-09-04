@@ -3,6 +3,7 @@ import ctypes.wintypes as wintypes
 from typing import *
 
 from memwin.utils import *
+from memwin.constants import *
 
 
 user32 = ctypes.WinDLL('user32', use_last_error=True)
@@ -10,13 +11,7 @@ kernel32 = ctypes.WinDLL('kernel32', use_last_error=True)
 ntdll = ctypes.WinDLL('ntdll')
 psapi = ctypes.WinDLL('psapi', use_last_error=True)
 
-TH32CS_SNAPTHREAD = 0x00000004
-INVALID_HANDLE_VALUE = wintypes.HANDLE(-1).value
-PROCESS_ALL_ACCESS = 0x1F0FFF
-THREAD_ALL_ACCESS = 0x1F03FF
-MEM_COMMIT = 0x1000
-MEM_RELEASE = 0x8000
-PAGE_READWRITE = 0x40
+
 
 class THREADENTRY32(ctypes.Structure):
     _fields_ = [

@@ -1,7 +1,7 @@
 .PHONY: help build test
 
 VERSION_FILE=memwin/version.py
-VERSION='1.9.2'
+VERSION='1.9.4'
 
 write_version:
 	@echo "version = $(VERSION)" > $(VERSION_FILE)

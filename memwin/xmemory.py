@@ -1,3 +1,4 @@
+from memwin.constants import XWinCon
 from memwin.utils import read_until_terminator
 from .structs import *
 from .xprocess import XProcess
@@ -176,7 +177,7 @@ class XMemory:
         path_bytes = str(dll_path).encode()
         path_size = len(path_bytes) + 1
         alloc_addr = XWinAPI.VirtualAllocEx(
-            self.h_process, 0, path_size, MEM_COMMIT, PAGE_READWRITE)
+            self.h_process, 0, path_size, XWinCon.MEM_COMMIT, XWinCon.PAGE_READWRITE)
         if not alloc_addr:
             print("VirtualAllocEx failed")
             return False
@@ -200,7 +201,7 @@ class XMemory:
         XWinAPI.WaitForSingleObject(h_thread, -1)
         # 释放内存
         XWinAPI.CloseHandle(h_thread)
-        XWinAPI.VirtualFreeEx(self.h_process, alloc_addr, 0, MEM_RELEASE)
+        XWinAPI.VirtualFreeEx(self.h_process, alloc_addr, 0, XWinCon.MEM_RELEASE)
         return True
 
     # ----------------------------- 线程相关 -----------------------------

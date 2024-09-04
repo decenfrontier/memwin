@@ -167,6 +167,15 @@ class XWinAPI:
         """
 
     @staticmethod
+    @api_annotater(user32.CopyCursor)
+    def CopyCursor(
+        hCursor: wintypes.HANDLE
+    ) -> wintypes.HANDLE:
+        """
+        本API拷贝一份Cursor句柄, 返回一个新句柄
+        """
+
+    @staticmethod
     @api_annotater(user32.LoadImageW)
     def LoadImage(
         hInst: wintypes.HINSTANCE,
@@ -196,16 +205,4 @@ class XWinAPI:
         本API用于设置系统鼠标指针
         - hCur: 要设置的鼠标指针的句柄, 
         - cursorId: 替换指针的哪种形态, 一般都用普通选择OCR_NORMAL=32512
-        """
-
-    @staticmethod
-    @api_annotater(user32.SystemParametersInfoW)
-    def SystemParametersInfo(
-        uiAction: wintypes.UINT,
-        uiParam: wintypes.UINT,
-        pvParam: wintypes.LPVOID,
-        fWinIni: wintypes.UINT
-    ) -> wintypes.BOOL:
-        """
-        本API用于恢复系统默认鼠标指针(未单测)
         """
