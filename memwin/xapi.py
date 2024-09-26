@@ -225,3 +225,35 @@ class XWinAPI:
         本API用于获取鼠标指向的窗口句柄
         - pt: 鼠标坐标
         """
+
+    @staticmethod
+    @api_annotater(user32.GetWindowTextW)
+    def GetWindowText(
+        hwnd: wintypes.HWND,
+        lpString: wintypes.LPWSTR,
+        nMaxCount: ctypes.c_int,
+    ) -> int:
+        """
+        本API用于获取窗口句柄对应的窗口标题
+        - hwnd: 窗口句柄
+        - lpString: [out]窗口标题
+        - nMaxCount: 窗口标题最大长度
+        如果函数成功，则返回值为复制的字符串的长度（以字符为单位），不包括终止 null 字符。 
+        如果窗口没有标题栏或文本，如果标题栏为空，或者窗口或控件句柄无效，则返回值为零。
+        """
+
+    @staticmethod
+    @api_annotater(user32.GetClassNameW)
+    def GetClassName(
+        hwnd: wintypes.HWND,
+        lpClassName: wintypes.LPWSTR,
+        nMaxCount: ctypes.c_int,
+    ) -> int:
+        """
+        本API用于获取窗口句柄对应的窗口类名
+        - hwnd: 窗口句柄
+        - lpClassName: [out]窗口类名
+        - nMaxCount: 窗口类名最大长度
+        如果函数成功，则返回值为复制的字符串的长度（以字符为单位），不包括终止 null 字符。 
+        如果窗口没有标题栏或文本，如果标题栏为空，或者窗口或控件句柄无效，则返回值为零。
+        """

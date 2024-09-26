@@ -85,3 +85,20 @@ def test_set_system_cursor():
 def test_window_from_point():
     hwnd = XWinAPI.WindowFromPoint(wintypes.POINT(150, 160))
     assert hwnd == 920638
+
+
+def test_get_window_text():
+    hwnd = 0x000911E4
+    buffer_size = 512  # 缓冲区大小
+    buffer = ctypes.create_unicode_buffer(buffer_size)
+    XWinAPI.GetWindowText(hwnd, buffer, buffer_size)
+    text = buffer.value
+    assert text == "计算器"
+
+def test_get_window_class():
+    hwnd = 0x70A1A
+    buffer_size = 512
+    buffer = ctypes.create_unicode_buffer(buffer_size)
+    XWinAPI.GetClassName(hwnd, buffer, buffer_size)
+    text = buffer.value
+    assert text == "Notepad"

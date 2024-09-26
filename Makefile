@@ -1,13 +1,13 @@
-.PHONY: help build test
+.PHONY: help build version test
 
 VERSION_FILE=memwin/version.py
-VERSION='1.9.6'
+VERSION='1.9.8'
 
-write_version:
+version:
 	@echo "version = $(VERSION)" > $(VERSION_FILE)
 
 
-build: write_version
+build: version
 	@echo "Building memwin-$(VERSION)"
 	@python setup.py sdist build
 	@echo "Uploading to PyPI"
@@ -17,7 +17,7 @@ build: write_version
 test:
 	# pytest -s tests/test_xprocess.py -k "test_create_process"
 	# pytest -s tests/test_xthread.py -k "test_get_pid"
-	pytest -s tests/test_xapi.py -k "test_window_from_point"
+	pytest -s tests/test_xapi.py -k "test_get_window_class"
 
 
 help:
